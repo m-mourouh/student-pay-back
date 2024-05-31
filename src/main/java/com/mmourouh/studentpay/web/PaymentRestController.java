@@ -1,6 +1,7 @@
 package com.mmourouh.studentpay.web;
 
 
+import com.mmourouh.studentpay.dto.NewPaymentDTO;
 import com.mmourouh.studentpay.entities.Payment;
 import com.mmourouh.studentpay.entities.Student;
 import com.mmourouh.studentpay.enums.PaymentStatus;
@@ -19,6 +20,7 @@ import java.util.List;
 
 
 @RestController
+@CrossOrigin("*")
 public class PaymentRestController {
     StudentRepository studentRepository;
     PaymentRepository paymentRepository;
@@ -73,9 +75,8 @@ public class PaymentRestController {
     }
 
     @PostMapping(path = "/payments", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Payment savePayment(@RequestParam MultipartFile file, LocalDate date, double amount, PaymentType type,
-                               String studentCode) throws IOException {
-        return paymentService.savePayment(file, date, amount, type, studentCode);
+    public Payment savePayment(@RequestParam("file") MultipartFile file, NewPaymentDTO newPaymentDTO) throws IOException {
+        return paymentService.savePayment(file, newPaymentDTO);
     }
 
     @GetMapping(path = "/payment-file/{id}", produces = MediaType.APPLICATION_PDF_VALUE)

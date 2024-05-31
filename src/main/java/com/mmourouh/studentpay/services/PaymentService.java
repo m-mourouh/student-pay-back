@@ -1,15 +1,15 @@
 package com.mmourouh.studentpay.services;
 
+import com.mmourouh.studentpay.dto.NewPaymentDTO;
 import com.mmourouh.studentpay.entities.Payment;
 import com.mmourouh.studentpay.entities.Student;
 import com.mmourouh.studentpay.enums.PaymentStatus;
-import com.mmourouh.studentpay.enums.PaymentType;
+
 import com.mmourouh.studentpay.repository.PaymentRepository;
 import com.mmourouh.studentpay.repository.StudentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -38,8 +38,7 @@ public class PaymentService {
         return paymentRepository.save(p);
     }
 
-    public Payment savePayment(MultipartFile file, LocalDate date, double amount, PaymentType type,
-                               String studentCode) throws IOException {
+    public Payment savePayment(MultipartFile file, NewPaymentDTO newPaymentDTO) throws IOException {
         Path folderPath = Paths.get(System.getProperty("user.home"), "students-data", "payments");
         //Create directories
         if(!Files.exists(folderPath)){
@@ -51,13 +50,13 @@ public class PaymentService {
         System.out.println("filePath: " + filePath);
         Files.copy(file.getInputStream(), filePath);
 
-        Student student = studentRepository.findStudentByCode(studentCode);
+        Student student = studentRepository.findStudentByCode(newPaymentDTO.getStudentCode());
         //build payment data
         Payment payment = Payment.builder()
-                .amount(amount)
-                .date(date)
+                .amount(newPaymentDTO.getAmount())
+                .date(newPaymentDTO.getDate())
                 .student(student)
-                .type(type)
+                .type(newPaymentDTO.getType())
                 .status(PaymentStatus.CREATED)
                 .file(filePath.toUri().toString())
                 .build();
