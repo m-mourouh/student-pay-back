@@ -2,6 +2,8 @@
 
 # Students Payments Management APP (back)
 
+![image](https://github.com/m-mourouh/hospital_app/assets/60442896/f44fc111-59c8-4485-943f-4309f721a406)
+
 ## API Endpoints
 ![image](https://github.com/m-mourouh/student-pay-back/assets/60442896/38fe24a1-573b-4fc8-97e6-b70786c2107e)
 
